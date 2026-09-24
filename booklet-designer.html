@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>طاولة التصميم</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;900&family=Cairo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root{
+  --mat:#1B2420;
+  --mat-line:rgba(255,255,255,0.05);
+  --panel:#222E28;
+  --card-tape:#E7CE79;
+  --paper:#FBF8F1;
+  --ink:#20241F;
+  --accent:#E2703A;
+  --muted:#9FB0A4;
+  --hair:rgba(255,255,255,0.09);
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:
+    linear-gradient(var(--mat-line) 1px, transparent 1px) 0 0/26px 26px,
+    linear-gradient(90deg, var(--mat-line) 1px, transparent 1px) 0 0/26px 26px,
+    var(--mat);
+  color:var(--paper);
+  font-family:'Cairo',sans-serif;
+  min-height:100vh;
+  padding:26px 18px 60px;
+}
+.wrap{max-width:1180px;margin:0 auto;}
+
+/* ---------- HEADER ---------- */
+.top{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  margin-bottom:22px;flex-wrap:wrap;gap:12px;
+}
+.top h1{
+  font-family:'Tajawal',sans-serif;font-weight:900;
+  font-size:clamp(24px,3.4vw,34px);margin:0;
+}
+.top .sub{color:var(--muted);font-size:13px;margin-top:4px;}
+.btn{
+  border:1px solid var(--hair);background:var(--panel);color:var(--paper);
+  font-family:'Cairo',sans-serif;font-weight:600;font-size:13px;
+  padding:9px 16px;border-radius:5px;cursor:pointer;transition:.15s;
+}
+.btn:hover{border-color:var(--accent);color:var(--accent);}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#1B140D;}
+.btn.primary:hover{opacity:.9;color:#1B140D;}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;}
+
+/* ---------- LAYOUT ---------- */
+.desk{display:grid;grid-template-columns:220px 1fr 260px;gap:18px;align-items:start;}
+@media(max-width:980px){.desk{grid-template-columns:1fr;}}
+
+/* ---------- PAGE LIST (index cards on tape) ---------- */
+.pages-panel{background:var(--panel);border:1px solid var(--hair);border-radius:8px;padding:16px;}
+.pages-panel h3{font-family:'Tajawal',sans-serif;font-size:13px;margin:0 0 12px;color:var(--muted);}
+.page-card{
+  position:relative;background:var(--paper);color:var(--ink);
+  border-radius:3px;padding:10px 10px 8px;margin-bottom:16px;cursor:pointer;
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;
+  box-shadow:0 6px 14px rgba(0,0,0,0.28);
+  transform:rotate(var(--r,0deg));
+  border:2px solid transparent;
+}
+.page-card:nth-child(odd){--r:-1.3deg;}
+.page-card:nth-child(even){--r:1deg;}
+.page-card.active{border-color:var(--accent);}
+.page-card::before{
+  content:"";position:absolute;top:-8px;right:20px;width:34px;height:14px;
+  background:var(--card-tape);opacity:.85;transform:rotate(-3deg);
+}
+.page-card .pnum{font-weight:700;color:var(--accent);}
+.page-card .ptitle{
+  font-family:'Cairo',sans-serif;font-size:12.5px;font-weight:600;
+  margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.add-page{
+  width:100%;background:transparent;border:1.5px dashed var(--hair);color:var(--muted);
+  border-radius:6px;padding:10px;font-family:'Cairo',sans-serif;font-size:12.5px;cursor:pointer;
+}
+.add-page:hover{border-color:var(--accent);color:var(--accent);}
+
+/* ---------- PREVIEW / RULER ---------- */
+.stage{display:flex;flex-direction:column;align-items:center;}
+.ruler-row{display:flex;width:100%;max-width:420px;}
+.ruler-corner{width:22px;}
+.ruler-x{
+  flex:1;height:22px;position:relative;
+  background:repeating-linear-gradient(90deg, var(--muted) 0 1px, transparent 1px 20px);
+  opacity:.5;
+}
+.ruler-wrap{display:flex;}
+.ruler-y{
+  width:22px;position:relative;
+  background:repeating-linear-gradient(180deg, var(--muted) 0 1px, transparent 1px 20px);
+  opacity:.5;
+}
+
+.page-canvas{
+  width:400px;max-width:100%;aspect-ratio:148/210;
+  background:var(--paper);color:var(--ink);
+  box-shadow:0 22px 50px rgba(0,0,0,0.45);
+  border-radius:2px;
+  padding:26px 24px;
+  display:flex;flex-direction:column;
+  font-family:'Cairo',sans-serif;
+  position:relative;
+  overflow:hidden;
+}
+.page-canvas .pg-eyebrow{
+  font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1.5px;
+  color:var(--theme-accent,var(--accent));text-transform:uppercase;margin-bottom:8px;
+}
+.page-canvas h2{
+  font-family:'Tajawal',sans-serif;font-weight:900;font-size:22px;line-height:1.3;
+  margin:0 0 10px;color:var(--ink);
+}
+.page-canvas .pg-body{font-size:12.5px;line-height:1.85;color:#3A3F38;flex:1;overflow:auto;}
+.page-canvas .pg-body ul{margin:0;padding:0 16px 0 0;}
+.page-canvas .pg-body li{margin-bottom:8px;}
+.page-canvas .pg-footer{
+  font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--muted);
+  border-top:1px solid #0000001a;padding-top:8px;margin-top:10px;
+  display:flex;justify-content:space-between;
+}
+.page-canvas.cover{
+  justify-content:center;align-items:center;text-align:center;
+  background:var(--theme-accent,var(--accent));color:#fff;
+}
+.page-canvas.cover h2{color:#fff;font-size:26px;}
+.page-canvas.cover .pg-tagline{font-size:12.5px;opacity:.9;margin-top:8px;}
+.page-canvas.cover .pg-eyebrow{color:rgba(255,255,255,0.75);}
+.page-canvas.cta{background:var(--ink);color:var(--paper);}
+.page-canvas.cta h2{color:var(--paper);}
+.page-canvas.cta .pg-body{color:#D9DED6;}
+
+.zoom-note{font-size:11px;color:var(--muted);margin-top:10px;text-align:center;}
+
+/* ---------- INSPECTOR ---------- */
+.inspector{background:var(--panel);border:1px solid var(--hair);border-radius:8px;padding:16px;}
+.inspector h3{font-family:'Tajawal',sans-serif;font-size:13px;margin:0 0 12px;color:var(--muted);}
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:11.5px;color:var(--muted);margin-bottom:5px;}
+.field input[type=text], .field textarea, .field select{
+  width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--hair);
+  border-radius:4px;padding:8px 9px;color:var(--paper);font-family:'Cairo',sans-serif;
+  font-size:12.5px;resize:vertical;
+}
+.field textarea{min-height:90px;line-height:1.6;}
+.layout-picker{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.layout-picker button{
+  background:rgba(255,255,255,0.04);border:1px solid var(--hair);color:var(--muted);
+  border-radius:5px;padding:7px 4px;font-size:11px;cursor:pointer;font-family:'Cairo',sans-serif;
+}
+.layout-picker button.active{border-color:var(--accent);color:var(--accent);}
+.theme-row{display:flex;gap:8px;}
+.swatch{
+  width:26px;height:26px;border-radius:50%;cursor:pointer;border:2px solid transparent;
+}
+.swatch.active{border-color:#fff;}
+.danger{color:#D97757;background:transparent;border:1px solid rgba(217,119,87,0.4);}
+.danger:hover{background:rgba(217,119,87,0.12);}
+
+.foot-note{text-align:center;font-size:11px;color:var(--muted);opacity:.6;margin-top:34px;font-family:'IBM Plex Mono',monospace;}
+
+/* ---------- PRINT ---------- */
+@media print{
+  body *{visibility:hidden;}
+  #printArea, #printArea *{visibility:visible;}
+  #printArea{position:absolute;top:0;left:0;width:100%;}
+  .print-page{
+    width:148mm;height:210mm;page-break-after:always;
+    padding:18mm 16mm;box-sizing:border-box;
+    display:flex;flex-direction:column;font-family:'Cairo',sans-serif;
+  }
+  @page{size:148mm 210mm;margin:0;}
+}
+#printArea{display:none;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <div>
+      <h1>طاولة التصميم</h1>
+      <div class="sub">صمّم كتيّب منتجك الرقمي — غلاف، صفحات، ودعوة لاتخاذ إجراء</div>
+    </div>
+    <div class="toolbar">
+      <button class="btn" onclick="duplicatePage()">تكرار الصفحة</button>
+      <button class="btn primary" onclick="doPrint()">تصدير PDF للطباعة</button>
+    </div>
+  </div>
+
+  <div class="desk">
+
+    <!-- PAGES LIST -->
+    <div class="pages-panel">
+      <h3>صفحات الكتيّب</h3>
+      <div id="pageList"></div>
+      <button class="add-page" onclick="addPage()">+ إضافة صفحة</button>
+    </div>
+
+    <!-- STAGE / PREVIEW -->
+    <div class="stage">
+      <div class="ruler-row">
+        <div class="ruler-corner"></div>
+        <div class="ruler-x"></div>
+      </div>
+      <div class="ruler-wrap">
+        <div class="ruler-y"></div>
+        <div class="page-canvas" id="pageCanvas"></div>
+      </div>
+      <div class="zoom-note">مقاس الكتيّب: A5 (148 × 210 مم) — المعاينة مصغّرة</div>
+    </div>
+
+    <!-- INSPECTOR -->
+    <div class="inspector">
+      <h3>محتوى الصفحة</h3>
+
+      <div class="field">
+        <label>نوع الصفحة</label>
+        <div class="layout-picker" id="layoutPicker">
+          <button data-l="cover" onclick="setLayout('cover')">غلاف</button>
+          <button data-l="text" onclick="setLayout('text')">نص</button>
+          <button data-l="list" onclick="setLayout('list')">نقاط</button>
+          <button data-l="cta" onclick="setLayout('cta')">دعوة لإجراء</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label id="eyebrowLabel">شريط علوي صغير</label>
+        <input type="text" id="f-eyebrow" oninput="updateField()">
+      </div>
+      <div class="field">
+        <label>العنوان</label>
+        <input type="text" id="f-title" oninput="updateField()">
+      </div>
+      <div class="field" id="bodyFieldWrap">
+        <label id="bodyLabel">المحتوى</label>
+        <textarea id="f-body" oninput="updateField()"></textarea>
+      </div>
+
+      <h3 style="margin-top:18px;">لون هوية الكتيّب</h3>
+      <div class="theme-row" id="themeRow"></div>
+
+      <button class="btn danger" style="width:100%;margin-top:16px;" onclick="deletePage()">حذف هذه الصفحة</button>
+    </div>
+
+  </div>
+
+  <div class="foot-note">اضبط النصوص من هنا، وسيتم توليد نسخة PDF جاهزة للطباعة بنفس ترتيب الصفحات عبر زر التصدير.</div>
+</div>
+
+<div id="printArea"></div>
+
+<script>
+const THEMES = ['#E2703A','#3FA796','#4C6EF5','#B65FCF','#D4A017'];
+let themeColor = THEMES[0];
+
+let pages = [
+  {layout:'cover', eyebrow:'كتيّب المنتج', title:'اسم المنتج الرقمي', body:'وصف قصير وجذاب يوضح قيمة المنتج للعميل في جملة واحدة.'},
+  {layout:'text', eyebrow:'المقدمة', title:'ليه المنتج ده؟', body:'اشرح هنا المشكلة اللي المنتج بيحلّها، ولمين موجّه بالظبط.'},
+  {layout:'list', eyebrow:'المميزات', title:'إيه اللي هتحصل عليه', body:'الميزة الأولى\nالميزة الثانية\nالميزة الثالثة'},
+  {layout:'cta', eyebrow:'الخطوة الجاية', title:'جاهز تبدأ؟', body:'رابط الشراء أو التواصل، مع سعر العرض إن وجد.'}
+];
+let activeIndex = 0;
+
+function layoutLabel(l){
+  return {cover:'غلاف', text:'نص', list:'نقاط', cta:'دعوة لإجراء'}[l];
+}
+
+function renderPageList(){
+  const list = document.getElementById('pageList');
+  list.innerHTML = pages.map((p,i) => `
+    <div class="page-card ${i===activeIndex?'active':''}" onclick="selectPage(${i})">
+      <div class="pnum">${String(i+1).padStart(2,'0')} — ${layoutLabel(p.layout)}</div>
+      <div class="ptitle">${p.title || 'بدون عنوان'}</div>
+    </div>
+  `).join('');
+}
+
+function selectPage(i){
+  activeIndex = i;
+  renderAll();
+}
+
+function addPage(){
+  pages.push({layout:'text', eyebrow:'صفحة جديدة', title:'عنوان الصفحة', body:'اكتب المحتوى هنا...'});
+  activeIndex = pages.length-1;
+  renderAll();
+}
+
+function duplicatePage(){
+  const copy = {...pages[activeIndex]};
+  pages.splice(activeIndex+1, 0, copy);
+  activeIndex = activeIndex+1;
+  renderAll();
+}
+
+function deletePage(){
+  if(pages.length <= 1) return;
+  pages.splice(activeIndex,1);
+  activeIndex = Math.max(0, activeIndex-1);
+  renderAll();
+}
+
+function setLayout(l){
+  pages[activeIndex].layout = l;
+  renderAll();
+}
+
+function updateField(){
+  const p = pages[activeIndex];
+  p.eyebrow = document.getElementById('f-eyebrow').value;
+  p.title = document.getElementById('f-title').value;
+  p.body = document.getElementById('f-body').value;
+  renderPageList();
+  renderCanvas();
+}
+
+function renderInspector(){
+  const p = pages[activeIndex];
+  document.querySelectorAll('#layoutPicker button').forEach(b=>{
+    b.classList.toggle('active', b.dataset.l === p.layout);
+  });
+  document.getElementById('f-eyebrow').value = p.eyebrow || '';
+  document.getElementById('f-title').value = p.title || '';
+  document.getElementById('f-body').value = p.body || '';
+  document.getElementById('bodyLabel').textContent = p.layout === 'list' ? 'العناصر (سطر لكل عنصر)' : 'المحتوى';
+}
+
+function pageInnerHTML(p){
+  const bodyHTML = p.layout === 'list'
+    ? `<ul>${(p.body||'').split('\n').filter(x=>x.trim()).map(x=>`<li>${escapeHTML(x)}</li>`).join('')}</ul>`
+    : `<p>${escapeHTML(p.body||'').replace(/\n/g,'<br>')}</p>`;
+
+  if(p.layout === 'cover'){
+    return `
+      <div class="pg-eyebrow">${escapeHTML(p.eyebrow||'')}</div>
+      <h2>${escapeHTML(p.title||'')}</h2>
+      <div class="pg-tagline">${escapeHTML(p.body||'')}</div>`;
+  }
+  return `
+    <div class="pg-eyebrow">${escapeHTML(p.eyebrow||'')}</div>
+    <h2>${escapeHTML(p.title||'')}</h2>
+    <div class="pg-body">${bodyHTML}</div>
+    <div class="pg-footer"><span>${layoutLabel(p.layout)}</span><span>صفحة ${activeIndex+1}</span></div>`;
+}
+
+function escapeHTML(s){
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function renderCanvas(){
+  const p = pages[activeIndex];
+  const canvas = document.getElementById('pageCanvas');
+  canvas.className = 'page-canvas ' + (p.layout === 'cover' ? 'cover' : p.layout === 'cta' ? 'cta' : '');
+  canvas.style.setProperty('--theme-accent', themeColor);
+  canvas.innerHTML = pageInnerHTML(p);
+}
+
+function renderThemeRow(){
+  const row = document.getElementById('themeRow');
+  row.innerHTML = THEMES.map(c => `
+    <div class="swatch ${c===themeColor?'active':''}" style="background:${c}" onclick="setTheme('${c}')"></div>
+  `).join('');
+}
+function setTheme(c){ themeColor = c; renderAll(); }
+
+function renderAll(){
+  renderPageList();
+  renderInspector();
+  renderCanvas();
+  renderThemeRow();
+}
+
+function doPrint(){
+  const area = document.getElementById('printArea');
+  area.innerHTML = pages.map((p,i) => `
+    <div class="print-page" style="${p.layout==='cover' ? `background:${themeColor};color:#fff;justify-content:center;align-items:center;text-align:center;` : p.layout==='cta' ? 'background:#20241F;color:#FBF8F1;' : 'background:#fff;color:#20241F;'}">
+      ${pageInnerHTMLForPrint(p, i)}
+    </div>
+  `).join('');
+  setTimeout(()=>window.print(), 80);
+}
+
+function pageInnerHTMLForPrint(p, i){
+  const eyebrowColor = (p.layout==='cover') ? 'rgba(255,255,255,0.8)' : themeColor;
+  const bodyHTML = p.layout === 'list'
+    ? `<ul style="padding-right:16px;line-height:1.9;">${(p.body||'').split('\n').filter(x=>x.trim()).map(x=>`<li>${escapeHTML(x)}</li>`).join('')}</ul>`
+    : `<p style="line-height:1.9;">${escapeHTML(p.body||'').replace(/\n/g,'<br>')}</p>`;
+  if(p.layout==='cover'){
+    return `<div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1.5px;color:${eyebrowColor};text-transform:uppercase;margin-bottom:10px;">${escapeHTML(p.eyebrow||'')}</div>
+      <h2 style="font-family:'Tajawal',sans-serif;font-weight:900;font-size:28px;margin:0 0 10px;">${escapeHTML(p.title||'')}</h2>
+      <div style="font-size:13px;opacity:.9;">${escapeHTML(p.body||'')}</div>`;
+  }
+  return `<div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1.5px;color:${eyebrowColor};text-transform:uppercase;margin-bottom:10px;">${escapeHTML(p.eyebrow||'')}</div>
+    <h2 style="font-family:'Tajawal',sans-serif;font-weight:900;font-size:24px;margin:0 0 14px;">${escapeHTML(p.title||'')}</h2>
+    <div style="font-size:13px;flex:1;">${bodyHTML}</div>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;opacity:.55;border-top:1px solid #0002;padding-top:8px;margin-top:12px;display:flex;justify-content:space-between;">
+      <span>${layoutLabel(p.layout)}</span><span>صفحة ${i+1}</span>
+    </div>`;
+}
+
+renderAll();
+</script>
+</body>
+</html>
